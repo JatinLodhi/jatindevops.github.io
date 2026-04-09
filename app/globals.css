@@ -1,0 +1,247 @@
+/* ── Google Fonts — must be first ─────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Variables ─────────────────────────────────────────── */
+:root {
+  --bg-base:     #050506;
+  --bg-deep:     #020203;
+  --bg-elevated: #0a0a0c;
+  --accent:      #5E6AD2;
+  --accent-bright: #6872D9;
+  --accent-glow: rgba(94, 106, 210, 0.3);
+  --fg:          #EDEDEF;
+  --fg-muted:    #8A8F98;
+  --border:      rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.10);
+}
+
+/* ── Base Reset ────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--fg);
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+/* ── Custom Scrollbar ──────────────────────────────────────── */
+::-webkit-scrollbar        { width: 3px; }
+::-webkit-scrollbar-track  { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb  { background: rgba(94,106,210,0.5); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ── Grid Overlay (fixed, behind everything) ───────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Reveal on Scroll ──────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Stagger delays for child items */
+.stagger > *:nth-child(1) { transition-delay: 0.00s; }
+.stagger > *:nth-child(2) { transition-delay: 0.07s; }
+.stagger > *:nth-child(3) { transition-delay: 0.14s; }
+.stagger > *:nth-child(4) { transition-delay: 0.21s; }
+.stagger > *:nth-child(5) { transition-delay: 0.28s; }
+.stagger > *:nth-child(6) { transition-delay: 0.35s; }
+.stagger > *:nth-child(7) { transition-delay: 0.42s; }
+.stagger > *:nth-child(8) { transition-delay: 0.49s; }
+.stagger > *:nth-child(9) { transition-delay: 0.56s; }
+
+/* ── Gradient Text Utilities ───────────────────────────────── */
+.text-gradient-white {
+  background: linear-gradient(to bottom, #ffffff, rgba(255,255,255,0.95), rgba(255,255,255,0.70));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-accent {
+  background: linear-gradient(90deg, #5E6AD2 0%, #818cf8 25%, #5E6AD2 50%, #818cf8 75%, #5E6AD2 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Terminal cursor ───────────────────────────────────────── */
+.terminal-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  background: var(--accent);
+  vertical-align: middle;
+  margin-left: 2px;
+  animation: cursor-blink 1s ease-in-out infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Skill bar ─────────────────────────────────────────────── */
+.skill-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-bright) 100%);
+  border-radius: 999px;
+  width: 0;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Card glass surface ────────────────────────────────────── */
+.card-glass {
+  background: linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 1rem;
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-glass:hover {
+  background: linear-gradient(to bottom, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+  border-color: rgba(255,255,255,0.10);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.10),
+    0 8px 40px rgba(0,0,0,0.5),
+    0 0 60px rgba(94,106,210,0.08);
+  transform: translateY(-4px);
+}
+
+/* ── Section separator ─────────────────────────────────────── */
+.section-sep {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.06), transparent);
+}
+
+/* ── DevOps Logo Float Animations ─────────────────────────── */
+/*
+ * Five distinct float paths so logos feel organic, not synchronised.
+ *
+ * Design rules:
+ *  • Max vertical travel:  14–24 px   (slow, dreamy)
+ *  • Max rotation:         ±2 deg     (barely perceptible tilt)
+ *  • Each path has a unique rhythm so no two logos bob together
+ *  • All transforms are in a single property (no standalone scale)
+ *    for maximum browser compatibility.
+ *
+ * Duration / delay / iteration are all set via inline style on the
+ * element so the same class can serve logos with different timings.
+ */
+
+/* Path A — gentle sine wave with slight counter-tilt at peak */
+@keyframes logo-float-a {
+  0%   { transform: translateY(0px)    rotate(0deg); }
+  25%  { transform: translateY(-14px)  rotate(1.8deg); }
+  50%  { transform: translateY(-5px)   rotate(-0.8deg); }
+  75%  { transform: translateY(-18px)  rotate(1.2deg); }
+  100% { transform: translateY(0px)    rotate(0deg); }
+}
+
+/* Path B — slower rise, faster dip, counter-clockwise lean */
+@keyframes logo-float-b {
+  0%   { transform: translateY(0px)    rotate(0deg); }
+  30%  { transform: translateY(-9px)   rotate(-1.5deg); }
+  60%  { transform: translateY(-20px)  rotate(0.8deg); }
+  80%  { transform: translateY(-7px)   rotate(-0.6deg); }
+  100% { transform: translateY(0px)    rotate(0deg); }
+}
+
+/* Path C — slight scale pulse layered with the float */
+@keyframes logo-float-c {
+  0%   { transform: translateY(0px)    rotate(0deg)   scale(1.000); }
+  20%  { transform: translateY(-15px)  rotate(1.4deg) scale(1.018); }
+  50%  { transform: translateY(-7px)   rotate(-1.8deg)scale(1.000); }
+  70%  { transform: translateY(-11px)  rotate(0.9deg) scale(0.984); }
+  100% { transform: translateY(0px)    rotate(0deg)   scale(1.000); }
+}
+
+/* Path D — deep single dip then quick return */
+@keyframes logo-float-d {
+  0%   { transform: translateY(0px)    rotate(0deg); }
+  40%  { transform: translateY(-22px)  rotate(-1.4deg); }
+  65%  { transform: translateY(-8px)   rotate(1.8deg); }
+  100% { transform: translateY(0px)    rotate(0deg); }
+}
+
+/* Path E — three-beat irregular rhythm */
+@keyframes logo-float-e {
+  0%   { transform: translateY(0px)    rotate(0deg); }
+  30%  { transform: translateY(-10px)  rotate(0.8deg); }
+  55%  { transform: translateY(-22px)  rotate(-1.6deg); }
+  78%  { transform: translateY(-5px)   rotate(0.4deg); }
+  100% { transform: translateY(0px)    rotate(0deg); }
+}
+
+/*
+ * Class names set animation-name only.
+ * Duration / delay / timing-function / iteration-count are
+ * all controlled by inline styles on each logo element so
+ * one class can serve many different timings.
+ */
+.logo-float-a { animation-name: logo-float-a; }
+.logo-float-b { animation-name: logo-float-b; }
+.logo-float-c { animation-name: logo-float-c; }
+.logo-float-d { animation-name: logo-float-d; }
+.logo-float-e { animation-name: logo-float-e; }
+
+/* ── Reduced motion overrides ──────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* ── Focus ring ────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid rgba(94,106,210,0.8);
+  outline-offset: 3px;
+  border-radius: 4px;
+}

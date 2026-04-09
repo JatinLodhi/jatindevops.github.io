@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(npx tsc:*)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/sanidhyy/space-portfolio/main/components/main/star-background.tsx\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/sanidhyy/space-portfolio/main/components/sub/star.tsx\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/sanidhyy/space-portfolio/main/constants/index.ts\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/sanidhyy/space-portfolio/main/package.json\")",
+      "Bash(node -e \"const pkg = require\\('E:/jatin/jatin.devops.io/node_modules/@react-three/drei/package.json'\\); console.log\\(pkg.version\\)\")",
+      "Bash(node -e \"const d = require\\('E:/jatin/jatin.devops.io/node_modules/@react-three/drei'\\); const L = d.Line; console.log\\(typeof L === 'function' ? L.toString\\(\\).slice\\(0,200\\) : JSON.stringify\\(Object.keys\\(L\\)\\)\\)\")",
+      "Bash(node --input-type=module --eval ':*)",
+      "WebFetch(domain:raw.githubusercontent.com)"
+    ]
+  }
+}

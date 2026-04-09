@@ -5,6 +5,19 @@
 (function () {
   'use strict';
 
+  /* ── Scroll Progress Bar ───────────────────────────────── */
+  var progressBar = document.getElementById('scrollProgress');
+
+  function updateProgress() {
+    var scrollTop  = window.scrollY;
+    var docHeight  = document.documentElement.scrollHeight - window.innerHeight;
+    var pct        = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    if (progressBar) progressBar.style.width = pct + '%';
+  }
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+
+
   /* ── Reveal on Scroll ──────────────────────────────────── */
   var revealEls = document.querySelectorAll('.rv');
 
@@ -25,13 +38,30 @@
   }, 1200);
 
 
+  /* ── Skill Bar Scroll Animation ────────────────────────── */
+  // Reads data-skill="XX" and animates width to XX% on intersection
+  var skillFills = document.querySelectorAll('.skill-fill[data-skill]');
+
+  var skillObs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        var target = entry.target.getAttribute('data-skill') + '%';
+        entry.target.style.width = target;
+        skillObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  skillFills.forEach(function (el) { skillObs.observe(el); });
+
+
   /* ── Stats Counter Animation ───────────────────────────── */
   function animateCounter(el) {
-    var target = parseInt(el.getAttribute('data-to'), 10);
-    var suffix = el.getAttribute('data-sfx') || '';
+    var target  = parseInt(el.getAttribute('data-to'), 10);
+    var suffix  = el.getAttribute('data-sfx') || '';
     var current = 0;
-    var step = target / (1400 / 16);
-    var timer = setInterval(function () {
+    var step    = target / (1400 / 16);
+    var timer   = setInterval(function () {
       current = Math.min(current + step, target);
       el.textContent = Math.floor(current) + suffix;
       if (current >= target) clearInterval(timer);
@@ -53,18 +83,16 @@
 
 
   /* ── Project Filter ────────────────────────────────────── */
-  var filterTabs = document.querySelectorAll('.ftab');
+  var filterTabs   = document.querySelectorAll('.ftab');
   var projectCards = document.querySelectorAll('.proj-card');
 
   filterTabs.forEach(function (tab) {
     tab.addEventListener('click', function () {
       var filter = tab.getAttribute('data-filter');
 
-      // Update active tab
       filterTabs.forEach(function (t) { t.classList.remove('active'); });
       tab.classList.add('active');
 
-      // Show / hide cards
       projectCards.forEach(function (card) {
         var match = filter === 'all' || card.getAttribute('data-cat') === filter;
         card.style.display = match ? 'flex' : 'none';
@@ -85,7 +113,7 @@
   });
 
   function updateScrollDots() {
-    var scrollY = window.scrollY + 220;
+    var scrollY     = window.scrollY + 220;
     var activeIndex = 0;
     sectionIds.forEach(function (id, i) {
       var el = document.getElementById(id);
@@ -108,7 +136,6 @@
       mobileMenu.classList.toggle('open');
     });
 
-    // Close on any mobile link click
     mobileMenu.querySelectorAll('a').forEach(function (link) {
       link.addEventListener('click', function () {
         mobileMenu.classList.remove('open');
@@ -145,5 +172,16 @@
         : 'none';
     }
   }, { passive: true });
+
+
+  /* ── Subtle Parallax on Hero background text ───────────── */
+  var heroBgText = document.querySelector('.hero-bg-text');
+
+  if (heroBgText) {
+    window.addEventListener('scroll', function () {
+      // Move at 30% of scroll speed for a subtle depth effect
+      heroBgText.style.transform = 'translateY(calc(-50% + ' + (window.scrollY * 0.3) + 'px))';
+    }, { passive: true });
+  }
 
 })();

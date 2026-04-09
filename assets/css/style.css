@@ -620,3 +620,156 @@ footer {
   .skills-grid   { grid-template-columns: 1fr; }
   .sec-header    { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
 }
+
+/* ── Scroll Progress Bar ─────────────────────────────────── */
+#scrollProgress {
+  position: fixed; top: 0; left: 0; z-index: 300;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--green), var(--cyan));
+  box-shadow: 0 0 8px rgba(0,255,136,0.5);
+  transition: width 0.08s linear;
+  pointer-events: none;
+}
+
+/* ── Staggered card reveals ──────────────────────────────── */
+/* proj-cards inside grid get delay based on position */
+.proj-card:nth-child(1) { transition-delay: 0.05s; }
+.proj-card:nth-child(2) { transition-delay: 0.10s; }
+.proj-card:nth-child(3) { transition-delay: 0.15s; }
+.proj-card:nth-child(4) { transition-delay: 0.20s; }
+.proj-card:nth-child(5) { transition-delay: 0.25s; }
+.proj-card:nth-child(6) { transition-delay: 0.30s; }
+.proj-card:nth-child(7) { transition-delay: 0.35s; }
+.proj-card:nth-child(8) { transition-delay: 0.40s; }
+.proj-card:nth-child(9) { transition-delay: 0.45s; }
+
+/* impact cards stagger */
+.impact-card:nth-child(1) { transition-delay: 0.05s; }
+.impact-card:nth-child(2) { transition-delay: 0.12s; }
+.impact-card:nth-child(3) { transition-delay: 0.19s; }
+.impact-card:nth-child(4) { transition-delay: 0.26s; }
+
+/* ── Enhanced card hovers ────────────────────────────────── */
+/* proj-card: lift + glow accent line */
+.proj-card {
+  position: relative;
+  transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.proj-card::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--green);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.proj-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+}
+.proj-card:hover::after { transform: scaleX(1); }
+
+/* about-card: scale icon on hover */
+.about-card {
+  transition: border-color 0.2s, transform 0.25s, box-shadow 0.25s;
+}
+.about-card:hover {
+  transform: translateX(4px);
+  box-shadow: -4px 0 20px rgba(0,255,136,0.08);
+}
+.about-card:hover .about-card-icon { transform: scale(1.2); }
+.about-card-icon { transition: transform 0.25s; }
+
+/* impact-card: enhanced glow on hover */
+.impact-card {
+  position: relative; overflow: hidden;
+}
+.impact-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 20% 50%, rgba(0,255,136,0.05) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.impact-card:hover::before { opacity: 1; }
+.impact-card:hover { box-shadow: 0 8px 32px rgba(0,255,136,0.1); }
+
+/* ── Skill bar animation (starts at 0, animated by JS) ───── */
+.skill-fill {
+  width: 0%; /* default; JS sets final width after intersection */
+  transition: width 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ── Featured card: subtle inner glow on hover ───────────── */
+.featured-card:hover {
+  box-shadow: 0 0 60px rgba(0,255,136,0.08), 0 40px 80px rgba(0,0,0,0.5);
+}
+
+/* ── Stat strip: hover highlight ─────────────────────────── */
+.stat-item {
+  transition: background 0.2s;
+  position: relative;
+}
+.stat-item:hover { background: rgba(0,255,136,0.04); }
+.stat-num { transition: text-shadow 0.3s; }
+.stat-item:hover .stat-num { text-shadow: 0 0 40px rgba(0,255,136,0.6); }
+
+/* ── Nav active link ─────────────────────────────────────── */
+.nav-links a.active { color: var(--green); }
+.nav-links a.active::after { transform: scaleX(1); }
+
+/* ── Contact link: left slide accent ────────────────────── */
+.contact-link { position: relative; overflow: hidden; }
+.contact-link::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--green);
+  transform: scaleY(0);
+  transition: transform 0.25s;
+}
+.contact-link:hover::before { transform: scaleY(1); }
+
+/* ── More-row hover: accent line ─────────────────────────── */
+.more-row {
+  position: relative;
+  border-left: 2px solid transparent;
+  transition: background 0.2s, border-color 0.2s;
+}
+.more-row:hover { border-left-color: var(--green); }
+
+/* ── Btn hover scale ─────────────────────────────────────── */
+.btn-primary { transition: box-shadow 0.2s, transform 0.2s; }
+.btn-primary:hover { transform: translateY(-2px); }
+.btn-outline { transition: border-color 0.2s, color 0.2s, transform 0.2s; }
+.btn-outline:hover { transform: translateY(-2px); }
+
+/* ── Horizontal scroll for projects on mobile ────────────── */
+@media (max-width: 900px) {
+  .projects-grid {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 0;
+    background: transparent;
+  }
+  .proj-card {
+    min-width: 82vw;
+    scroll-snap-align: start;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+}
+
+/* ── Parallax hero bg text (JS controls transform) ───────── */
+.hero-bg-text { will-change: transform; }
+
+/* ── Skill-group stagger ─────────────────────────────────── */
+.skill-group:nth-child(1) { transition-delay: 0.05s; }
+.skill-group:nth-child(2) { transition-delay: 0.10s; }
+.skill-group:nth-child(3) { transition-delay: 0.15s; }
+.skill-group:nth-child(4) { transition-delay: 0.20s; }
+.skill-group:nth-child(5) { transition-delay: 0.25s; }
