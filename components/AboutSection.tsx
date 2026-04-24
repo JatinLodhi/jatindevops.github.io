@@ -29,24 +29,24 @@ const ABOUT_CARDS = [
 
 export default function AboutSection() {
   return (
-    <section id="about" className="relative z-10 py-24 lg:py-32">
+    <section id="about" className="relative z-10 py-14 lg:py-20">
       <div className="max-w-6xl mx-auto px-6">
 
-        {/* Section header */}
-        <AnimatedSection className="mb-12">
+        {/* Section header — slides in from the left */}
+        <AnimatedSection className="mb-8" from="left">
           <p className="text-[0.62rem] font-mono tracking-[0.3em] text-accent uppercase mb-3">
             // 00 — ABOUT
           </p>
-          <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gradient-white">
+          <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gradient-heading">
             ABOUT ME
           </h2>
         </AnimatedSection>
 
         {/* Two-column layout */}
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
 
-          {/* Left: about text */}
-          <AnimatedSection delay={80}>
+          {/* Left: about text — slides from left */}
+          <AnimatedSection delay={80} from="left">
             <div className="space-y-5 text-fg-muted leading-relaxed">
               <p>
                 <span className="text-fg font-medium">DevOps Engineer</span> with{' '}
@@ -71,8 +71,8 @@ export default function AboutSection() {
             </div>
           </AnimatedSection>
 
-          {/* Right: cards */}
-          <AnimatedSection delay={160}>
+          {/* Right: cards — slides from right */}
+          <AnimatedSection delay={160} from="right">
             <div className="grid sm:grid-cols-2 gap-4">
               {ABOUT_CARDS.map(({ icon, label, labelColor, desc }) => (
                 <div

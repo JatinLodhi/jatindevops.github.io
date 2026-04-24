@@ -1,13 +1,14 @@
-import Navbar         from '@/components/Navbar'
-import HeroSection    from '@/components/HeroSection'
-import StatsStrip     from '@/components/StatsStrip'
-import AboutSection   from '@/components/AboutSection'
-import FeaturedProject from '@/components/FeaturedProject'
-import ProjectsSection from '@/components/ProjectsSection'
-import SkillsSection  from '@/components/SkillsSection'
-import ImpactSection  from '@/components/ImpactSection'
-import ContactSection from '@/components/ContactSection'
-import Footer         from '@/components/Footer'
+import Navbar            from '@/components/Navbar'
+import HeroSection       from '@/components/HeroSection'
+import StatsStrip        from '@/components/StatsStrip'
+import AboutSection      from '@/components/AboutSection'
+import ExperienceSection from '@/components/ExperienceSection'
+import FeaturedProject   from '@/components/FeaturedProject'
+import ProjectsSection   from '@/components/ProjectsSection'
+import SkillsSection     from '@/components/SkillsSection'
+import ImpactSection     from '@/components/ImpactSection'
+import ContactSection    from '@/components/ContactSection'
+import Footer            from '@/components/Footer'
 
 export default function Home() {
   return (
@@ -17,6 +18,8 @@ export default function Home() {
       <StatsStrip />
       <div className="section-sep" />
       <AboutSection />
+      <div className="section-sep" />
+      <ExperienceSection />
       <div className="section-sep" />
       <FeaturedProject />
       <div className="section-sep" />

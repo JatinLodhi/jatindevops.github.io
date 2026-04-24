@@ -114,23 +114,23 @@ export default function SkillsSection() {
   const active = SKILL_GROUPS.find((g) => g.key === activeKey) ?? SKILL_GROUPS[0]
 
   return (
-    <section id="skills" className="relative z-10 py-24 lg:py-32 bg-bg-elevated/40">
+    <section id="skills" className="relative z-10 py-14 lg:py-20 bg-bg-elevated/40">
       <div className="max-w-6xl mx-auto px-6">
 
-        {/* Header */}
-        <AnimatedSection className="mb-12">
+        {/* Header — heading slides in from left */}
+        <AnimatedSection className="mb-8" from="left">
           <p className="text-[0.62rem] font-mono tracking-[0.3em] text-accent uppercase mb-3">
-            // 03 — STACK
+            // 04 — STACK
           </p>
-          <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gradient-white">
+          <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gradient-heading">
             TECH STACK
           </h2>
         </AnimatedSection>
 
         <div className="grid lg:grid-cols-[280px_1fr] gap-8">
 
-          {/* Left: tab list */}
-          <AnimatedSection delay={60}>
+          {/* Left: tab list — slides from left */}
+          <AnimatedSection delay={60} from="left">
             <nav
               role="tablist"
               aria-label="Skill categories"
@@ -162,8 +162,8 @@ export default function SkillsSection() {
             </nav>
           </AnimatedSection>
 
-          {/* Right: skill bars panel */}
-          <AnimatedSection delay={120}>
+          {/* Right: skill bars panel — slides from right */}
+          <AnimatedSection delay={120} from="right">
             <div
               id={`skills-panel-${activeKey}`}
               role="tabpanel"

@@ -2,20 +2,27 @@
 
 import { useState } from 'react'
 import AnimatedSection from './AnimatedSection'
+import { Cloud } from '@react-three/drei'
 
 /* ── Data ─────────────────────────────────────────────────── */
-type Category = 'all' | 'infra' | 'cicd' | 'monitor' | 'security' | 'container' | 'ha' | 'cost'
+type Category = 'all' | 'infra' | 'cicd' | 'Configuration Management' | 'monitor' | 'security' | 'container' | 'ha' | 'cost'
 
 const FILTERS: { key: Category; label: string }[] = [
   { key: 'all',       label: 'ALL'              },
   { key: 'infra',     label: 'INFRASTRUCTURE'   },
   { key: 'cicd',      label: 'CI/CD'            },
+  { key: 'Configuration Management', label: 'CONFIG MGMT' },
   { key: 'monitor',   label: 'MONITORING'       },
   { key: 'security',  label: 'SECURITY'         },
   { key: 'container', label: 'CONTAINERS'       },
   { key: 'ha',        label: 'HIGH AVAILABILITY'},
   { key: 'cost',      label: 'COST OPS'         },
 ]
+
+interface MarketplaceLink {
+  cloud: string
+  href: string
+}
 
 interface Project {
   num: string
@@ -25,6 +32,10 @@ interface Project {
   desc: string
   tags: string[]
   highlight: string
+  /** Optional GitHub repo link — rendered as a button on the card */
+  githubLink?: string
+  /** Optional cloud marketplace links — rendered as live buttons on the card */
+  marketplaceLinks?: MarketplaceLink[]
 }
 
 const PROJECTS: Project[] = [
@@ -34,13 +45,19 @@ const PROJECTS: Project[] = [
     desc:  'Unified IaC framework across AWS & Azure. 200+ resources provisioned, time slashed from 2 days to 30 minutes. Policy-as-code with Checkov and Sentinel.',
     tags:  ['Terraform', 'Checkov', 'Sentinel', 'GitHub Actions'],
     highlight: '2 days → 30 min · 200+ resources',
+    githubLink: 'https://github.com/JatinLodhi/Terraform-Full-Course-Aws',
   },
   {
     num: '02', cat: 'infra', catLabel: 'INFRASTRUCTURE',
-    title: 'Catalyst — Azure Kubernetes Infrastructure',
-    desc:  'Complete AKS cluster with ACR, API Gateway, MongoDB, and Kafka. NGINX ingress with Prometheus/Grafana observability. Resolved complex Terraform dependency issues.',
-    tags:  ['AKS', 'ACR', 'Kafka', 'NGINX'],
-    highlight: 'Full Azure K8s stack end-to-end',
+    title: 'Multi-Cloud VM Images with HashiCorp Packer',
+    desc:  'Production-ready VM image pipeline for an API Testing Tool across AWS (AMI), Azure (VHD), and DigitalOcean (Snapshot). Full runtime stack — MongoDB 7, Node.js 20, Java 17, nginx — with security hardening: UFW, Fail2ban, AppArmor, ClamAV, and AIDE file integrity monitoring.',
+    tags:  ['Packer', 'AWS AMI', 'Azure VHD', 'DigitalOcean'],
+    highlight: '3 clouds unified · 90% provisioning time saved',
+    marketplaceLinks: [
+      { cloud: 'AWS',          href: 'https://aws.amazon.com/marketplace/search/results?searchTerms=sparrow+community+edition' },
+      { cloud: 'Azure',        href: 'https://marketplace.microsoft.com/en-us/product/techdomesolutionsprivatelimited1708671149622.community-sparrow-linux-vm?tab=Overview' },
+      { cloud: 'DigitalOcean', href: 'https://marketplace.digitalocean.com/apps/sparrow-community-edition-1' },
+    ],
   },
   {
     num: '03', cat: 'cicd', catLabel: 'CI/CD',
@@ -51,10 +68,10 @@ const PROJECTS: Project[] = [
   },
   {
     num: '04', cat: 'cicd', catLabel: 'CI/CD',
-    title: 'Funplex — Cloud Sync & Monitoring',
-    desc:  'Ansible-automated server config with Cloud Sync across multiple regions. MSSQL exporter + Prometheus via CloudProxy tunneling for cross-region observability.',
-    tags:  ['Ansible', 'Prometheus', 'CloudProxy', 'MSSQL'],
-    highlight: 'Multi-region monitoring pipeline',
+    title: 'Game Zone — Cloud Sync & Monitoring',
+    desc:  'Ansible-automated server config with Cloud Sync across multiple regions using GitHub Actions. MSSQL exporter + Prometheus via CloudProxy tunneling for cross-region observability.',
+    tags:  ['GitHub Actions', 'Ansible', 'Prometheus', 'CloudProxy', 'MSSQL'],
+    highlight: 'Multi-region deployment pipeline',
   },
   {
     num: '05', cat: 'monitor', catLabel: 'MONITORING',
@@ -94,7 +111,6 @@ const PROJECTS: Project[] = [
 ]
 
 const MORE_PROJECTS = [
-  { name: 'Sparrow — Self-Hosted Cloud POC',       stack: 'Packer · Docker · SSL/TLS',               metric: '90% time saved'            },
   { name: 'Moakcasey — IaC & CI/CD Pipeline',      stack: 'Terraform · GitHub Actions',              metric: 'Zero inconsistencies'      },
   { name: 'Plaintiff — Multi-Environment IaC',     stack: 'Terraform · DEV / UAT / PROD',            metric: '3 envs standardized'       },
   { name: 'Mythicboost — Full Pipeline Ownership', stack: 'GitHub Secrets · 73 env vars',            metric: 'End-to-end owned'          },
@@ -130,16 +146,16 @@ export default function ProjectsSection() {
     : PROJECTS.filter((p) => p.cat === active)
 
   return (
-    <section id="projects" className="relative z-10 py-24 lg:py-32">
+    <section id="projects" className="relative z-10 py-14 lg:py-20">
       <div className="max-w-6xl mx-auto px-6">
 
-        {/* Header */}
-        <AnimatedSection className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        {/* Header — heading slides in from left */}
+        <AnimatedSection className="mb-7 flex flex-col sm:flex-row sm:items-end justify-between gap-4" from="left">
           <div>
             <p className="text-[0.62rem] font-mono tracking-[0.3em] text-accent uppercase mb-3">
-              // 02 — WORK
+              // 03 — WORK
             </p>
-            <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gradient-white">
+            <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gradient-heading">
               SELECTED PROJECTS
             </h2>
           </div>
@@ -149,42 +165,56 @@ export default function ProjectsSection() {
         </AnimatedSection>
 
         {/* Filter tabs — horizontal scroll on mobile */}
-        <AnimatedSection delay={60} className="mb-8">
+        <AnimatedSection delay={60} className="mb-8" from="right">
           <div
             className="flex gap-2 overflow-x-auto pb-2 scrollbar-none"
             role="tablist"
             aria-label="Filter projects by category"
           >
-            {FILTERS.map(({ key, label }) => (
-              <button
-                key={key}
-                type="button"
-                role="tab"
-                aria-selected={active === key}
-                onClick={() => setActive(key)}
-                className={`shrink-0 px-4 py-2 rounded-lg text-[0.65rem] font-mono tracking-widest uppercase transition-all duration-200 border ${
-                  active === key
-                    ? 'bg-accent text-white border-accent shadow-[0_0_12px_rgba(94,106,210,0.3)]'
-                    : 'bg-white/[0.03] text-fg-muted border-white/[0.06] hover:bg-white/[0.06] hover:text-fg hover:border-white/10'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
+            {FILTERS.map(({ key, label }) => {
+              // Light colour palette per filter — inactive state
+              const filterColors: Record<string, string> = {
+                all:       'border-violet-400/50  bg-violet-400/10  text-violet-300  hover:border-violet-400/80  hover:bg-violet-400/20  hover:text-violet-200',
+                infra:     'border-indigo-400/50  bg-indigo-400/10  text-indigo-300  hover:border-indigo-400/80  hover:bg-indigo-400/20  hover:text-indigo-200',
+                cicd:      'border-orange-400/50  bg-orange-400/10  text-orange-300  hover:border-orange-400/80  hover:bg-orange-400/20  hover:text-orange-200',
+                monitor:   'border-yellow-400/50  bg-yellow-400/10  text-yellow-300  hover:border-yellow-400/80  hover:bg-yellow-400/20  hover:text-yellow-200',
+                security:  'border-red-400/50     bg-red-400/10     text-red-300     hover:border-red-400/80     hover:bg-red-400/20     hover:text-red-200',
+                container: 'border-purple-400/50  bg-purple-400/10  text-purple-300  hover:border-purple-400/80  hover:bg-purple-400/20  hover:text-purple-200',
+                ha:        'border-cyan-400/50    bg-cyan-400/10    text-cyan-300    hover:border-cyan-400/80    hover:bg-cyan-400/20    hover:text-cyan-200',
+                cost:      'border-green-400/50   bg-green-400/10   text-green-300   hover:border-green-400/80   hover:bg-green-400/20   hover:text-green-200',
+              }
+
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  role="tab"
+                  aria-selected={active === key}
+                  onClick={() => setActive(key)}
+                  className={`shrink-0 px-4 py-2 rounded-lg text-[0.65rem] font-semibold font-mono tracking-widest uppercase transition-all duration-200 border ${
+                    active === key
+                      ? 'bg-accent text-white border-accent shadow-[0_0_16px_rgba(94,106,210,0.45)]'
+                      : filterColors[key] ?? 'border-white/20 bg-white/[0.04] text-white/60 hover:bg-white/[0.08] hover:text-white/90'
+                  }`}
+                >
+                  {label}
+                </button>
+              )
+            })}
           </div>
         </AnimatedSection>
 
         {/* Projects grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
           {filtered.map((p, i) => (
-            <AnimatedSection key={p.num} delay={i * 50}>
+            <AnimatedSection key={p.num} delay={i * 60} from="depth">
               <ProjectCard project={p} />
             </AnimatedSection>
           ))}
         </div>
 
         {/* More work section */}
-        <AnimatedSection delay={100}>
+        <AnimatedSection delay={100} from="depth">
           <div className="card-glass p-0 overflow-hidden">
             <button
               type="button"
@@ -198,7 +228,7 @@ export default function ProjectsSection() {
                   // MORE WORK
                 </p>
                 <p className="text-sm text-fg-muted">
-                  13 additional projects
+                  12 additional projects
                 </p>
               </div>
               <svg
@@ -240,7 +270,7 @@ export default function ProjectsSection() {
 
 /* ── Project card ─────────────────────────────────────────── */
 function ProjectCard({ project }: { project: Project }) {
-  const { num, catLabel, title, desc, tags, highlight } = project
+  const { num, catLabel, title, desc, tags, highlight, githubLink, marketplaceLinks } = project
   const badgeColor = CAT_COLORS[catLabel] ?? 'text-fg-muted border-white/10 bg-white/[0.03]'
 
   return (
@@ -264,12 +294,106 @@ function ProjectCard({ project }: { project: Project }) {
         {tags.map((tag) => (
           <span
             key={tag}
-            className="px-2 py-0.5 rounded text-[0.6rem] font-mono text-fg-muted/80 border border-white/[0.06] bg-white/[0.03]"
+            className="px-2.5 py-1 rounded-md text-[0.62rem] font-semibold font-mono text-white/80 border border-white/20 bg-white/[0.08]"
           >
             {tag}
           </span>
         ))}
       </div>
+
+      {/* GitHub link — only rendered when present */}
+      {githubLink && (
+        <a
+          href={githubLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-3 py-2 rounded-lg
+                     border border-white/20 bg-white/[0.06]
+                     text-[0.65rem] font-semibold font-mono tracking-wide text-white/80
+                     hover:border-white/40 hover:bg-white/[0.12] hover:text-white
+                     transition-all duration-200 group/gh w-fit"
+          aria-label="View source on GitHub"
+        >
+          {/* GitHub Invertocat icon */}
+          <svg
+            viewBox="0 0 16 16"
+            className="w-3.5 h-3.5 fill-current opacity-80 group-hover/gh:opacity-100 transition-opacity"
+            aria-hidden="true"
+          >
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+                     0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+                     -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+                     .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15
+                     -.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09
+                     2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82
+                     2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01
+                     2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+          </svg>
+          VIEW ON GITHUB
+          <svg
+            className="w-2.5 h-2.5 opacity-60 group-hover/gh:opacity-100 group-hover/gh:translate-x-px group-hover/gh:-translate-y-px transition-transform duration-150"
+            viewBox="0 0 10 10"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M2 8L8 2M5 2h3v3" />
+          </svg>
+        </a>
+      )}
+
+      {/* Marketplace links — only rendered when present */}
+      {marketplaceLinks && marketplaceLinks.length > 0 && (
+        <div className="flex flex-col gap-2.5 pt-1">
+          {/* Label — bold, white */}
+          <p className="text-[0.6rem] font-bold font-mono tracking-[0.18em] text-white uppercase">
+            Live on Marketplace
+          </p>
+
+          <div className="flex flex-wrap gap-2">
+            {marketplaceLinks.map(({ cloud, href }) => {
+              // Brand-accurate light colours per cloud provider
+              const style: Record<string, string> = {
+                AWS:          'border-amber-400/40  bg-amber-400/10  text-amber-300  hover:border-amber-400/70  hover:bg-amber-400/20  hover:text-amber-200',
+                Azure:        'border-sky-400/40    bg-sky-400/10    text-sky-300    hover:border-sky-400/70    hover:bg-sky-400/20    hover:text-sky-200',
+                DigitalOcean: 'border-teal-400/40   bg-teal-400/10   text-teal-300   hover:border-teal-400/70   hover:bg-teal-400/20   hover:text-teal-200',
+              }
+              const cls = style[cloud] ?? 'border-white/20 bg-white/[0.06] text-white/70 hover:border-white/40 hover:bg-white/10 hover:text-white'
+
+              return (
+                <a
+                  key={cloud}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                              text-[0.65rem] font-semibold font-mono tracking-wide
+                              border transition-all duration-200 group/link ${cls}`}
+                  aria-label={`View on ${cloud} Marketplace`}
+                >
+                  {cloud}
+                  {/* External link arrow */}
+                  <svg
+                    className="w-2.5 h-2.5 opacity-70 group-hover/link:opacity-100 group-hover/link:translate-x-px group-hover/link:-translate-y-px transition-transform duration-150"
+                    viewBox="0 0 10 10"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M2 8L8 2M5 2h3v3" />
+                  </svg>
+                </a>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Highlight bar */}
       <div className="pt-3 border-t border-white/[0.06]">

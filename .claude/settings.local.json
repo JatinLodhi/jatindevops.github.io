@@ -13,7 +13,14 @@
       "Bash(node -e \"const pkg = require\\('E:/jatin/jatin.devops.io/node_modules/@react-three/drei/package.json'\\); console.log\\(pkg.version\\)\")",
       "Bash(node -e \"const d = require\\('E:/jatin/jatin.devops.io/node_modules/@react-three/drei'\\); const L = d.Line; console.log\\(typeof L === 'function' ? L.toString\\(\\).slice\\(0,200\\) : JSON.stringify\\(Object.keys\\(L\\)\\)\\)\")",
       "Bash(node --input-type=module --eval ':*)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:55945)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(netstat -ano)",
+      "Bash(findstr \":3000\")",
+      "Bash(node -e \"const {execSync} = require\\('child_process'\\); try { execSync\\('npx tsc --noEmit', {stdio:'pipe', timeout:30000}\\); console.log\\('OK'\\); } catch\\(e\\) { console.log\\(e.stdout?.toString\\(\\) || e.stderr?.toString\\(\\) || e.message\\); }\")",
+      "mcp__Apify__apify--rag-web-browser"
     ]
   }
 }

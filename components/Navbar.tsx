@@ -3,11 +3,12 @@
 import { useState, useEffect } from 'react'
 
 const NAV_LINKS = [
-  { href: '#about',    label: 'About'    },
-  { href: '#featured', label: 'Projects' },
-  { href: '#skills',   label: 'Stack'    },
-  { href: '#impact',   label: 'Impact'   },
-  { href: '#contact',  label: 'Contact'  },
+  { href: '#about',      label: 'About'      },
+  { href: '#experience', label: 'Experience' },
+  { href: '#featured',   label: 'Projects'   },
+  { href: '#skills',     label: 'Stack'      },
+  { href: '#impact',     label: 'Impact'     },
+  { href: '#contact',    label: 'Contact'    },
 ]
 
 /* ── Scroll Progress Bar ─────────────────────────────────────── */
@@ -86,8 +87,23 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Right side: status + mobile toggle */}
+          {/* Right side: Medium + status + mobile toggle */}
           <div className="flex items-center gap-4">
+            {/* Medium blog link */}
+            <a
+              href="https://jatinlodhi.medium.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Medium blog"
+              className="hidden sm:flex items-center gap-1.5 text-fg-muted hover:text-white transition-colors duration-200"
+            >
+              {/* Medium M icon */}
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden="true">
+                <path d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+              </svg>
+              <span className="text-[0.6rem] font-mono tracking-[0.1em] uppercase">Blog</span>
+            </a>
+
             {/* Available status badge */}
             <div className="hidden sm:flex items-center gap-2" aria-label="Availability status">
               <span

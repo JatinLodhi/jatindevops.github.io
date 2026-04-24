@@ -35,21 +35,21 @@ const ARCH_LINES = [
 
 export default function FeaturedProject() {
   return (
-    <section id="featured" className="relative z-10 py-24 lg:py-32 bg-bg-elevated/40">
+    <section id="featured" className="relative z-10 py-14 lg:py-20 bg-bg-elevated/40">
       <div className="max-w-6xl mx-auto px-6">
 
-        {/* Section header */}
-        <AnimatedSection className="mb-12">
+        {/* Section header — slides in from the left */}
+        <AnimatedSection className="mb-8" from="left">
           <p className="text-[0.62rem] font-mono tracking-[0.3em] text-accent uppercase mb-3">
-            // 01 — FEATURED
+            // 02 — FEATURED
           </p>
-          <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gradient-white">
+          <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gradient-heading">
             FLAGSHIP PROJECT
           </h2>
         </AnimatedSection>
 
-        {/* Featured card */}
-        <AnimatedSection delay={100}>
+        {/* Featured card — emerges from depth */}
+        <AnimatedSection delay={100} from="depth">
           <div
             className="card-glass p-0 overflow-hidden"
             style={{

@@ -61,14 +61,41 @@ body::before {
 }
 
 /* ── Reveal on Scroll ──────────────────────────────────────── */
+/*
+ * Base: fade + slide-up (default).
+ * Directional variants via data-from attribute:
+ *   left  → slide in from the left   (headings)
+ *   right → slide in from the right  (right-column content)
+ *   depth → scale up from behind     (cards — back-to-front)
+ */
 .reveal {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(28px);
   transition:
-    opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity  1s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
+
+/* --- left: slides in from the left (headings) --- */
+.reveal[data-from="left"] {
+  transform: translateX(-72px);
+}
+
+/* --- right: slides in from the right --- */
+.reveal[data-from="right"] {
+  transform: translateX(72px);
+}
+
+/*
+ * --- depth: back-to-front (cards).
+ * Starts scaled down + slightly low — looks like it emerges from depth.
+ */
+.reveal[data-from="depth"] {
+  transform: scale(0.87) translateY(28px);
+}
+
+/* All variants arrive at the same resting position */
 .reveal.visible {
   opacity: 1;
   transform: none;
@@ -86,11 +113,48 @@ body::before {
 .stagger > *:nth-child(9) { transition-delay: 0.56s; }
 
 /* ── Gradient Text Utilities ───────────────────────────────── */
+
+/*
+ * Static white gradient — kept for backwards compat (hero h1 legacy).
+ * Prefer text-gradient-heading for all section headings.
+ */
 .text-gradient-white {
   background: linear-gradient(to bottom, #ffffff, rgba(255,255,255,0.95), rgba(255,255,255,0.70));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+/*
+ * Animated floating gradient — applied to all section headings.
+ * A wide 300% gradient slowly drifts across the text creating
+ * a "floating colour" effect:
+ *   white → indigo-300 → accent-indigo → violet-300 → white
+ * Duration 10 s linear for a dreamy, unhurried flow.
+ */
+.text-gradient-heading {
+  background: linear-gradient(
+    90deg,
+    #ffffff   0%,
+    #c7d2fe  12%,
+    #818cf8  25%,
+    #5E6AD2  38%,
+    #7c3aed  50%,
+    #c4b5fd  62%,
+    #a5b4fc  75%,
+    #ffffff  88%,
+    #c7d2fe 100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: heading-float 10s linear infinite;
+}
+
+@keyframes heading-float {
+  0%   { background-position:   0% center; }
+  100% { background-position: 300% center; }
 }
 
 .text-gradient-accent {
@@ -105,6 +169,22 @@ body::before {
 @keyframes shimmer {
   0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
+}
+
+/*
+ * One-time entrance animation for hero heading (left → right).
+ * Applied directly via inline style — plays once on page load,
+ * never repeats.  Uses animation-fill-mode: both so the element
+ * is invisible before the delay fires.
+ */
+@keyframes enter-from-left {
+  from { opacity: 0; transform: translateX(-80px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes enter-from-right {
+  from { opacity: 0; transform: translateX(80px); }
+  to   { opacity: 1; transform: none; }
 }
 
 /* ── Terminal cursor ───────────────────────────────────────── */

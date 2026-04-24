@@ -45,15 +45,15 @@ const IMPACTS = [
 
 export default function ImpactSection() {
   return (
-    <section id="impact" className="relative z-10 py-24 lg:py-32">
+    <section id="impact" className="relative z-10 py-14 lg:py-20">
       <div className="max-w-6xl mx-auto px-6">
 
-        {/* Header */}
-        <AnimatedSection className="mb-12">
+        {/* Header — heading slides in from left */}
+        <AnimatedSection className="mb-8" from="left">
           <p className="text-[0.62rem] font-mono tracking-[0.3em] text-accent uppercase mb-3">
-            // 04 — RESULTS
+            // 05 — RESULTS
           </p>
-          <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gradient-white">
+          <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gradient-heading">
             BUSINESS IMPACT
           </h2>
         </AnimatedSection>
@@ -61,7 +61,7 @@ export default function ImpactSection() {
         {/* Cards grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {IMPACTS.map(({ icon, num, unit, key, desc, color, border, numColor }, i) => (
-            <AnimatedSection key={key} delay={i * 80}>
+            <AnimatedSection key={key} delay={i * 90} from="depth">
               <div
                 className={`card-glass p-6 h-full bg-gradient-to-b ${color} border ${border} flex flex-col gap-4`}
               >

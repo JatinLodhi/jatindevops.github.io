@@ -18,8 +18,8 @@ const QUICK_STATS = [
 const CONTACT_LINKS = [
   {
     icon: '✉️',
-    label: 'jatindevops10@gmail.com',
-    href: 'mailto:jatindevops10@gmail.com',
+    label: 'jllodhi2435@gmail.com',
+    href: 'mailto:jllodhi2435@gmail.com',
     ariaLabel: 'Email',
   },
   {
@@ -30,25 +30,31 @@ const CONTACT_LINKS = [
   },
   {
     icon: '🐙',
-    label: 'github.com/jatinlodhi2002',
-    href: 'https://github.com/jatinlodhi2002',
+    label: 'github.com/JatinLodhi',
+    href: 'https://github.com/JatinLodhi',
     ariaLabel: 'GitHub profile',
+  },
+  {
+    icon: '📝',
+    label: 'jatinlodhi.medium.com',
+    href: 'https://jatinlodhi.medium.com/',
+    ariaLabel: 'Medium blog',
   },
 ]
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="relative z-10 py-24 lg:py-32 bg-bg-elevated/40">
+    <section id="contact" className="relative z-10 py-14 lg:py-20 bg-bg-elevated/40">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
-          {/* Left: CTA */}
-          <AnimatedSection>
+          {/* Left: CTA — slides from left */}
+          <AnimatedSection from="left">
             <p className="text-[0.62rem] font-mono tracking-[0.3em] text-accent uppercase mb-4">
-              // 05 — CONTACT
+              // 06 — CONTACT
             </p>
             <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight leading-tight mb-6">
-              <span className="text-gradient-white">LET&apos;S BUILD</span>
+              <span className="text-gradient-heading">LET&apos;S BUILD</span>
               <br />
               <span className="text-gradient-accent">TOGETHER</span>
             </h2>
@@ -80,8 +86,8 @@ export default function ContactSection() {
             </div>
           </AnimatedSection>
 
-          {/* Right: terminal quick stats */}
-          <AnimatedSection delay={120}>
+          {/* Right: terminal quick stats — slides from right */}
+          <AnimatedSection delay={120} from="right">
             <div
               className="card-glass overflow-hidden"
               style={{

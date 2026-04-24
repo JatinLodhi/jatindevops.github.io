@@ -147,8 +147,14 @@ export default function HeroSection() {
         {/* Left column: tag → headline → subtitle → desc → CTAs */}
         <div className="flex-1 text-center lg:text-left">
 
-          {/* Tag pill */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-sm">
+          {/* Tag pill — fades up on load */}
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-sm"
+            style={{
+              animation: 'enter-from-left 0.8s cubic-bezier(0.16,1,0.3,1) both',
+              animationDelay: '0.05s',
+            }}
+          >
             <span
               className="w-1.5 h-1.5 rounded-full bg-accent animate-status-pulse"
               aria-hidden="true"
@@ -158,22 +164,50 @@ export default function HeroSection() {
             </span>
           </div>
 
-          {/* Main headline */}
+          {/* Main headline — slides in from the left on page load, one time */}
           <h1
             className="text-5xl sm:text-6xl lg:text-[5.5rem] xl:text-[6.5rem] font-semibold leading-none tracking-[-0.03em] mb-4"
             aria-label="DevOps Engineer"
           >
-            <span className="block text-gradient-white">DEVOPS</span>
-            <span className="block text-gradient-white">ENGINEER</span>
+            <span
+              className="block text-gradient-heading"
+              style={{
+                animation: 'enter-from-left 0.9s cubic-bezier(0.16,1,0.3,1) both',
+                animationDelay: '0.2s',
+              }}
+            >
+              DEVOPS
+            </span>
+            <span
+              className="block text-gradient-heading"
+              style={{
+                animation: 'enter-from-left 0.9s cubic-bezier(0.16,1,0.3,1) both',
+                animationDelay: '0.4s',
+              }}
+            >
+              ENGINEER
+            </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-[0.65rem] font-mono tracking-[0.2em] text-fg-muted mb-6 uppercase">
+          <p
+            className="text-[0.65rem] font-mono tracking-[0.2em] text-fg-muted mb-6 uppercase"
+            style={{
+              animation: 'enter-from-left 0.8s cubic-bezier(0.16,1,0.3,1) both',
+              animationDelay: '0.55s',
+            }}
+          >
             AWS · AZURE · GCP · KUBERNETES · TERRAFORM
           </p>
 
           {/* Description */}
-          <p className="text-base lg:text-lg text-fg-muted leading-relaxed max-w-[480px] mx-auto lg:mx-0 mb-8">
+          <p
+            className="text-base lg:text-lg text-fg-muted leading-relaxed max-w-[480px] mx-auto lg:mx-0 mb-8"
+            style={{
+              animation: 'enter-from-left 0.8s cubic-bezier(0.16,1,0.3,1) both',
+              animationDelay: '0.7s',
+            }}
+          >
             <strong className="text-fg font-medium">3 years</strong> automating cloud
             infrastructure, CI/CD pipelines and deployments at scale.{' '}
             <strong className="text-fg font-medium">22 production projects</strong> across
@@ -184,7 +218,13 @@ export default function HeroSection() {
           </p>
 
           {/* CTA buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+          <div
+            className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start"
+            style={{
+              animation: 'enter-from-left 0.8s cubic-bezier(0.16,1,0.3,1) both',
+              animationDelay: '0.85s',
+            }}
+          >
             <a
               href="#featured"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-accent text-white text-sm font-medium
@@ -204,8 +244,14 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Right column: Terminal mock */}
-        <div className="flex-1 w-full max-w-[440px]">
+        {/* Right column: Terminal mock — slides in from the right on load */}
+        <div
+          className="flex-1 w-full max-w-[440px]"
+          style={{
+            animation: 'enter-from-right 1s cubic-bezier(0.16,1,0.3,1) both',
+            animationDelay: '0.5s',
+          }}
+        >
           <div
             className="card-glass overflow-hidden"
             aria-label="Terminal output preview"
