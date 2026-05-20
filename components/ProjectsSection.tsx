@@ -2,13 +2,13 @@
 
 import { useState } from 'react'
 import AnimatedSection from './AnimatedSection'
-import { Cloud } from '@react-three/drei'
 
 /* ── Data ─────────────────────────────────────────────────── */
-type Category = 'all' | 'infra' | 'cicd' | 'Configuration Management' | 'monitor' | 'security' | 'container' | 'ha' | 'cost'
+type Category = 'all' | 'infra' | 'cicd' | 'Configuration Management' | 'monitor' | 'security' | 'container' | 'ha' | 'cost' | 'ai'
 
 const FILTERS: { key: Category; label: string }[] = [
   { key: 'all',       label: 'ALL'              },
+  { key: 'ai',        label: 'AI / ML OPS'      },
   { key: 'infra',     label: 'INFRASTRUCTURE'   },
   { key: 'cicd',      label: 'CI/CD'            },
   { key: 'Configuration Management', label: 'CONFIG MGMT' },
@@ -32,9 +32,11 @@ interface Project {
   desc: string
   tags: string[]
   highlight: string
-  /** Optional GitHub repo link — rendered as a button on the card */
+  /** Optional GitHub repo link */
   githubLink?: string
-  /** Optional cloud marketplace links — rendered as live buttons on the card */
+  /** Optional Medium article link */
+  mediumLink?: string
+  /** Optional cloud marketplace links */
   marketplaceLinks?: MarketplaceLink[]
 }
 
@@ -60,11 +62,13 @@ const PROJECTS: Project[] = [
     ],
   },
   {
-    num: '03', cat: 'cicd', catLabel: 'CI/CD',
-    title: 'Full-Stack Jenkins & GitOps Pipeline',
-    desc:  'Multi-stage pipeline with automated testing, SonarQube quality gates, and Trivy security scanning. 70% deployment time reduction with 98% pipeline success rate.',
-    tags:  ['Jenkins', 'GitOps', 'SonarQube', 'Trivy'],
-    highlight: '70% deploy time reduction · 98% success rate',
+    num: '03', cat: 'ai', catLabel: 'AI / ML OPS',
+    title: 'AI K8s Checker — Intelligent Cluster Diagnostics',
+    desc:  'AI-powered Kubernetes diagnostics tool that scans every pod across all namespaces every 5 minutes, detects failure states (CrashLoopBackOff, OOMKilled, ImagePullBackOff), auto-runs kubectl diagnostics, and delivers LLM-generated root-cause analysis + remediation steps to Microsoft Teams. Runs as a Kubernetes CronJob on AKS with read-only RBAC, duplicate-alert suppression, and zero paid API keys — powered entirely by local Llama 3.2 via Ollama.',
+    tags:  ['Python', 'Llama 3.2', 'Ollama', 'Kubernetes', 'AKS', 'CronJob', 'MS Teams', 'Docker', 'RBAC'],
+    highlight: '20 min → seconds · 70–80% on-call load automated',
+    githubLink: 'https://github.com/JatinLodhi/ai-k8s-checker',
+    mediumLink: 'https://jatinlodhi.medium.com/i-gave-my-kubernetes-cluster-a-brain-heres-what-happened-84c9ff5bf65b',
   },
   {
     num: '04', cat: 'cicd', catLabel: 'CI/CD',
@@ -107,6 +111,27 @@ const PROJECTS: Project[] = [
     desc:  'Slashed monthly AWS spend by 42% from $120K to $70K. Automated cleanup saving $15K/month, 70% of workloads on Spot Instances with interruption handling.',
     tags:  ['AWS', 'Spot Instances', 'FinOps', 'Python'],
     highlight: '$50K/month saved · 42% cost reduction',
+  },
+  {
+    num: '10', cat: 'ai', catLabel: 'AI / ML OPS',
+    title: 'AI-Powered Incident Intelligence & Auto-Remediation',
+    desc:  'AIOps pipeline integrating Prometheus alerts with an LLM-based diagnosis agent. On alert trigger, the agent pulls correlated logs from Loki, performs root-cause analysis, and auto-remediates known patterns — pod restarts, scaling events, config rollbacks — reducing MTTR by 75% and eliminating 80% of manual on-call interventions.',
+    tags:  ['Python', 'LLM', 'Prometheus', 'Loki', 'Kubernetes', 'GitHub Actions'],
+    highlight: '75% MTTR reduction · 80% fewer on-call pages',
+  },
+  {
+    num: '11', cat: 'ai', catLabel: 'AI / ML OPS',
+    title: 'LLM Serving Infrastructure on Kubernetes',
+    desc:  'Production-grade serving platform for open-source LLMs (LLaMA 3, Mistral) on GPU-enabled Kubernetes. vLLM inference engine with NVIDIA device plugin, horizontal pod autoscaling on custom GPU-utilisation metrics, and a GitHub Actions pipeline for zero-downtime model version rollouts.',
+    tags:  ['Kubernetes', 'vLLM', 'NVIDIA GPU', 'HPA', 'Terraform', 'Prometheus'],
+    highlight: '< 200 ms p99 latency · Auto GPU scaling',
+  },
+  {
+    num: '12', cat: 'ai', catLabel: 'AI / ML OPS',
+    title: 'MLOps CI/CD Pipeline with MLflow & GitHub Actions',
+    desc:  'End-to-end MLOps platform: model training triggered on data push, experiment tracking in MLflow, automated evaluation gates, and Docker-packaged model deployment to Kubernetes. Feature store backed by Redis, with Prometheus metrics exported per-model for drift detection and performance monitoring in production.',
+    tags:  ['MLflow', 'GitHub Actions', 'Docker', 'Redis', 'Kubernetes', 'Python'],
+    highlight: 'Train → Deploy in 12 min · Drift monitoring live',
   },
 ]
 
@@ -175,6 +200,7 @@ export default function ProjectsSection() {
               // Light colour palette per filter — inactive state
               const filterColors: Record<string, string> = {
                 all:       'border-violet-400/50  bg-violet-400/10  text-violet-300  hover:border-violet-400/80  hover:bg-violet-400/20  hover:text-violet-200',
+                ai:        'border-pink-400/50    bg-pink-400/10    text-pink-300    hover:border-pink-400/80    hover:bg-pink-400/20    hover:text-pink-200',
                 infra:     'border-indigo-400/50  bg-indigo-400/10  text-indigo-300  hover:border-indigo-400/80  hover:bg-indigo-400/20  hover:text-indigo-200',
                 cicd:      'border-orange-400/50  bg-orange-400/10  text-orange-300  hover:border-orange-400/80  hover:bg-orange-400/20  hover:text-orange-200',
                 monitor:   'border-yellow-400/50  bg-yellow-400/10  text-yellow-300  hover:border-yellow-400/80  hover:bg-yellow-400/20  hover:text-yellow-200',
@@ -270,7 +296,7 @@ export default function ProjectsSection() {
 
 /* ── Project card ─────────────────────────────────────────── */
 function ProjectCard({ project }: { project: Project }) {
-  const { num, catLabel, title, desc, tags, highlight, githubLink, marketplaceLinks } = project
+  const { num, catLabel, title, desc, tags, highlight, githubLink, mediumLink, marketplaceLinks } = project
   const badgeColor = CAT_COLORS[catLabel] ?? 'text-fg-muted border-white/10 bg-white/[0.03]'
 
   return (
@@ -301,48 +327,56 @@ function ProjectCard({ project }: { project: Project }) {
         ))}
       </div>
 
-      {/* GitHub link — only rendered when present */}
-      {githubLink && (
-        <a
-          href={githubLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-3 py-2 rounded-lg
-                     border border-white/20 bg-white/[0.06]
-                     text-[0.65rem] font-semibold font-mono tracking-wide text-white/80
-                     hover:border-white/40 hover:bg-white/[0.12] hover:text-white
-                     transition-all duration-200 group/gh w-fit"
-          aria-label="View source on GitHub"
-        >
-          {/* GitHub Invertocat icon */}
-          <svg
-            viewBox="0 0 16 16"
-            className="w-3.5 h-3.5 fill-current opacity-80 group-hover/gh:opacity-100 transition-opacity"
-            aria-hidden="true"
-          >
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
-                     0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
-                     -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
-                     .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15
-                     -.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09
-                     2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82
-                     2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01
-                     2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
-          </svg>
-          VIEW ON GITHUB
-          <svg
-            className="w-2.5 h-2.5 opacity-60 group-hover/gh:opacity-100 group-hover/gh:translate-x-px group-hover/gh:-translate-y-px transition-transform duration-150"
-            viewBox="0 0 10 10"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M2 8L8 2M5 2h3v3" />
-          </svg>
-        </a>
+      {/* Link buttons row — GitHub + Medium */}
+      {(githubLink || mediumLink) && (
+        <div className="flex flex-wrap gap-2">
+          {/* GitHub */}
+          {githubLink && (
+            <a
+              href={githubLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg
+                         border border-white/20 bg-white/[0.06]
+                         text-[0.65rem] font-semibold font-mono tracking-wide text-white/80
+                         hover:border-white/40 hover:bg-white/[0.12] hover:text-white
+                         transition-all duration-200 group/gh w-fit"
+              aria-label="View source on GitHub"
+            >
+              <svg viewBox="0 0 16 16" className="w-3.5 h-3.5 fill-current opacity-80 group-hover/gh:opacity-100 transition-opacity" aria-hidden="true">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+              </svg>
+              GITHUB
+              <svg className="w-2.5 h-2.5 opacity-60 group-hover/gh:translate-x-px group-hover/gh:-translate-y-px transition-transform duration-150" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M2 8L8 2M5 2h3v3" />
+              </svg>
+            </a>
+          )}
+
+          {/* Medium article */}
+          {mediumLink && (
+            <a
+              href={mediumLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg
+                         border border-green-400/30 bg-green-400/[0.06]
+                         text-[0.65rem] font-semibold font-mono tracking-wide text-green-300/90
+                         hover:border-green-400/60 hover:bg-green-400/[0.12] hover:text-green-200
+                         transition-all duration-200 group/med w-fit"
+              aria-label="Read article on Medium"
+            >
+              {/* Medium M icon */}
+              <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current opacity-80 group-hover/med:opacity-100 transition-opacity" aria-hidden="true">
+                <path d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+              </svg>
+              READ ARTICLE
+              <svg className="w-2.5 h-2.5 opacity-60 group-hover/med:translate-x-px group-hover/med:-translate-y-px transition-transform duration-150" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M2 8L8 2M5 2h3v3" />
+              </svg>
+            </a>
+          )}
+        </div>
       )}
 
       {/* Marketplace links — only rendered when present */}

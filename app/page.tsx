@@ -1,14 +1,15 @@
-import Navbar            from '@/components/Navbar'
-import HeroSection       from '@/components/HeroSection'
-import StatsStrip        from '@/components/StatsStrip'
-import AboutSection      from '@/components/AboutSection'
-import ExperienceSection from '@/components/ExperienceSection'
-import FeaturedProject   from '@/components/FeaturedProject'
-import ProjectsSection   from '@/components/ProjectsSection'
-import SkillsSection     from '@/components/SkillsSection'
-import ImpactSection     from '@/components/ImpactSection'
-import ContactSection    from '@/components/ContactSection'
-import Footer            from '@/components/Footer'
+import Navbar                 from '@/components/Navbar'
+import HeroSection            from '@/components/HeroSection'
+import StatsStrip             from '@/components/StatsStrip'
+import AboutSection           from '@/components/AboutSection'
+import ExperienceSection      from '@/components/ExperienceSection'
+import FeaturedProject        from '@/components/FeaturedProject'
+import ProjectsSection        from '@/components/ProjectsSection'
+import SkillsSection          from '@/components/SkillsSection'
+import GitHubActivitySection  from '@/components/GitHubActivitySection'
+import ImpactSection          from '@/components/ImpactSection'
+import ContactSection         from '@/components/ContactSection'
+import Footer                 from '@/components/Footer'
 
 export default function Home() {
   return (
@@ -26,6 +27,8 @@ export default function Home() {
       <ProjectsSection />
       <div className="section-sep" />
       <SkillsSection />
+      <div className="section-sep" />
+      <GitHubActivitySection />
       <div className="section-sep" />
       <ImpactSection />
       <div className="section-sep" />

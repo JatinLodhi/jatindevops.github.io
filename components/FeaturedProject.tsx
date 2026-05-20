@@ -1,36 +1,36 @@
 import AnimatedSection from './AnimatedSection'
 
 const METRICS = [
-  { val: '1M+',    lbl: 'Requests / Day'       },
-  { val: '75%',    lbl: 'Deploy Time Reduced'   },
-  { val: '99.95%', lbl: 'Uptime Achieved'       },
-  { val: '3-AZ',   lbl: 'High Availability'     },
+  { val: '100k+',  lbl: 'Concurrent Users'   },
+  { val: '99.95%', lbl: 'Production SLA'     },
+  { val: '3-AZ',   lbl: 'High Availability'  },
+  { val: '7',      lbl: 'Terraform Modules'  },
 ]
 
 const TAGS = [
-  { label: 'AWS EKS',     color: 'border-accent/30 text-accent/90 bg-accent/5'   },
-  { label: 'Terraform',   color: 'border-accent/30 text-accent/90 bg-accent/5'   },
-  { label: 'Docker',      color: 'border-white/10  text-fg-muted  bg-white/[0.03]' },
-  { label: 'Helm',        color: 'border-white/10  text-fg-muted  bg-white/[0.03]' },
-  { label: 'Prometheus',  color: 'border-orange-400/30 text-orange-400/90 bg-orange-400/5' },
-  { label: 'Grafana',     color: 'border-orange-400/30 text-orange-400/90 bg-orange-400/5' },
-  { label: 'ALB',         color: 'border-white/10  text-fg-muted  bg-white/[0.03]' },
-  { label: 'CloudFront',  color: 'border-white/10  text-fg-muted  bg-white/[0.03]' },
-  { label: 'RDS',         color: 'border-white/10  text-fg-muted  bg-white/[0.03]' },
-  { label: 'ElastiCache', color: 'border-white/10  text-fg-muted  bg-white/[0.03]' },
+  { label: 'Azure AKS',      color: 'border-accent/30 text-accent/90 bg-accent/5'   },
+  { label: 'Terraform',      color: 'border-accent/30 text-accent/90 bg-accent/5'   },
+  { label: 'Azure CNI',      color: 'border-accent/30 text-accent/90 bg-accent/5'   },
+  { label: 'GitHub Actions', color: 'border-orange-400/30 text-orange-400/90 bg-orange-400/5' },
+  { label: 'Azure Monitor',  color: 'border-orange-400/30 text-orange-400/90 bg-orange-400/5' },
+  { label: 'ACR Premium',    color: 'border-white/10 text-fg-muted bg-white/[0.03]' },
+  { label: 'Helm',           color: 'border-white/10 text-fg-muted bg-white/[0.03]' },
+  { label: 'Kubernetes 1.31',color: 'border-white/10 text-fg-muted bg-white/[0.03]' },
+  { label: 'Log Analytics',  color: 'border-white/10 text-fg-muted bg-white/[0.03]' },
+  { label: 'Azure AD RBAC',  color: 'border-white/10 text-fg-muted bg-white/[0.03]' },
 ]
 
 const ARCH_LINES = [
-  { indent: 0, color: 'text-accent',      text: '+-- CloudFront CDN'              },
-  { indent: 1, color: 'text-yellow-400',  text: '+-- Application Load Balancer'   },
-  { indent: 2, color: 'text-accent',      text: '+-- EKS Cluster (Multi-AZ)'      },
-  { indent: 3, color: 'text-green-400',   text: '|   +-- Node Group AZ-1a ●'      },
-  { indent: 3, color: 'text-green-400',   text: '|   +-- Node Group AZ-1b ●'      },
-  { indent: 3, color: 'text-green-400',   text: '|   +-- Node Group AZ-1c ●'      },
-  { indent: 2, color: 'text-yellow-400',  text: '+-- RDS Multi-AZ'                },
-  { indent: 2, color: 'text-yellow-400',  text: '+-- ElastiCache Redis'            },
-  { indent: 2, color: 'text-red-400',     text: '+-- Prometheus + Grafana'         },
-  { indent: 1, color: 'text-accent',      text: '+-- Terraform IaC (all resources)' },
+  { indent: 0, color: 'text-yellow-400', text: '+-- GitHub Actions CI/CD'                  },
+  { indent: 1, color: 'text-accent',     text: '+-- Terraform 1.10 (7 modules)'            },
+  { indent: 2, color: 'text-accent',     text: '+-- AKS Cluster (Multi-AZ · Premium)'      },
+  { indent: 3, color: 'text-green-400',  text: '|   +-- System Node Pool  AZ 1-2-3 ●'      },
+  { indent: 3, color: 'text-green-400',  text: '|   +-- Frontend Pool     AZ 1-2-3 ●'      },
+  { indent: 3, color: 'text-green-400',  text: '|   +-- Backend Pool      AZ 1-2-3 ●'      },
+  { indent: 2, color: 'text-orange-400', text: '+-- Azure Monitor + Log Analytics'         },
+  { indent: 2, color: 'text-yellow-400', text: '+-- ACR Premium (geo-replicated)'          },
+  { indent: 2, color: 'text-accent',     text: '+-- User Assigned Identity (RBAC)'         },
+  { indent: 1, color: 'text-accent',     text: '+-- Workspaces: dev / uat / prod'          },
 ]
 
 export default function FeaturedProject() {
@@ -69,14 +69,15 @@ export default function FeaturedProject() {
                 </div>
 
                 <h3 className="text-xl sm:text-2xl font-semibold text-fg leading-tight mb-4 tracking-tight">
-                  PRODUCTION-GRADE AWS EKS CLUSTER WITH FULL OBSERVABILITY
+                  PRODUCTION-GRADE AZURE AKS INFRASTRUCTURE FOR 100K+ CONCURRENT USERS
                 </h3>
 
                 <p className="text-sm text-fg-muted leading-relaxed mb-8">
-                  Enterprise Kubernetes deployment serving 1M+ requests/day. Multi-AZ high
-                  availability with ALB, CloudFront CDN, RDS, and ElastiCache — fully provisioned
-                  through Terraform IaC with Helm charts and a complete Prometheus/Grafana
-                  observability stack.
+                  Enterprise-scale AKS cluster on Azure designed for 100k+ concurrent users.
+                  Three dedicated node pools with independent auto-scaling across 3 availability
+                  zones, Azure CNI networking, and a GitHub Actions CI/CD pipeline with manual
+                  approval gates — fully provisioned through 7 modular Terraform modules across
+                  dev / uat / prod workspaces with no var-files required.
                 </p>
 
                 {/* Metrics */}

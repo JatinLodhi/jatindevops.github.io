@@ -13,8 +13,8 @@
   --accent:      #5E6AD2;
   --accent-bright: #6872D9;
   --accent-glow: rgba(94, 106, 210, 0.3);
-  --fg:          #EDEDEF;
-  --fg-muted:    #8A8F98;
+  --fg:          #F4F4F6;
+  --fg-muted:    #A8ADB8;
   --border:      rgba(255, 255, 255, 0.06);
   --border-hover: rgba(255, 255, 255, 0.10);
 }
@@ -209,7 +209,7 @@ body::before {
   background: linear-gradient(90deg, var(--accent) 0%, var(--accent-bright) 100%);
   border-radius: 999px;
   width: 0;
-  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: width 2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ── Card glass surface ────────────────────────────────────── */

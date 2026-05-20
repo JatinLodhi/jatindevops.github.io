@@ -38,8 +38,9 @@ export default function AnimatedSection({
     const el = ref.current
     if (!el) return
 
-    // Safety net: ensure visibility even if observer never fires
-    const safetyTimer = setTimeout(() => el.classList.add('visible'), 1500)
+    // Safety net: ensure visibility even if observer never fires (long timeout so it doesn't
+    // pre-reveal off-screen sections before the user scrolls to them)
+    const safetyTimer = setTimeout(() => el.classList.add('visible'), 10000)
 
     const observer = new IntersectionObserver(
       ([entry]) => {

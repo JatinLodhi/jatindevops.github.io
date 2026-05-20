@@ -49,6 +49,8 @@ export default function AboutSection() {
           <AnimatedSection delay={80} from="left">
             <div className="space-y-5 text-fg-muted leading-relaxed">
               <p>
+                Hi, I&apos;m{' '}
+                <span className="text-fg font-semibold">Jatin Lodhi</span> — a{' '}
                 <span className="text-fg font-medium">DevOps Engineer</span> with{' '}
                 <span className="text-accent font-medium">3 years of hands-on experience</span>{' '}
                 automating cloud infrastructure, CI/CD pipelines, and deployment workflows

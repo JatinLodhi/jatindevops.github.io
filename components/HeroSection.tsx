@@ -159,7 +159,7 @@ export default function HeroSection() {
               className="w-1.5 h-1.5 rounded-full bg-accent animate-status-pulse"
               aria-hidden="true"
             />
-            <span className="text-[0.65rem] font-mono tracking-[0.18em] text-fg-muted uppercase">
+            <span className="text-[0.65rem] font-mono tracking-[0.18em] text-fg uppercase">
               DevOps Engineer · 3 Years XP
             </span>
           </div>
