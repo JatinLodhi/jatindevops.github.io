@@ -1,23 +1,84 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import AnimatedSection from './AnimatedSection'
 
 /* ── Types ─────────────────────────────────────────────── */
-interface GitHubEvent {
+interface StaticEvent {
   id: string
-  type: string
-  repo: { name: string }
-  payload: {
-    commits?: Array<{ message: string; sha: string }>
-    pull_request?: { title: string; number: number; state: string }
-    ref?: string
-    ref_type?: string
-    action?: string
-    issue?: { title: string; number: number }
-  }
-  created_at: string
+  type: 'PushEvent' | 'PullRequestEvent' | 'CreateEvent' | 'IssuesEvent' | 'WatchEvent' | 'ForkEvent'
+  repo: string          // short name (without owner)
+  repoFull: string      // JatinLodhi/repo-name
+  message: string       // human-readable description
+  date: string          // ISO string
 }
+
+/* ── Static curated events ──────────────────────────────── */
+const EVENTS: StaticEvent[] = [
+  {
+    id: '1',
+    type: 'PushEvent',
+    repo: 'ai-k8s-checker',
+    repoFull: 'JatinLodhi/ai-k8s-checker',
+    message: 'feat: add MS Teams webhook alert for CrashLoopBackOff pods',
+    date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: '2',
+    type: 'PushEvent',
+    repo: 'ai-k8s-checker',
+    repoFull: 'JatinLodhi/ai-k8s-checker',
+    message: 'refactor: switch LLM backend to Ollama Llama 3.2 (+2)',
+    date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: '3',
+    type: 'CreateEvent',
+    repo: 'mlops-pipeline',
+    repoFull: 'JatinLodhi/mlops-pipeline',
+    message: 'created branch feature/drift-detection',
+    date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: '4',
+    type: 'PushEvent',
+    repo: 'Terraform-Full-Course-Aws',
+    repoFull: 'JatinLodhi/Terraform-Full-Course-Aws',
+    message: 'docs: add module examples for EKS node groups',
+    date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: '5',
+    type: 'PullRequestEvent',
+    repo: 'ai-k8s-checker',
+    repoFull: 'JatinLodhi/ai-k8s-checker',
+    message: '#4: Add RBAC ClusterRole for read-only pod access',
+    date: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: '6',
+    type: 'PushEvent',
+    repo: 'jatin.devops.io',
+    repoFull: 'JatinLodhi/jatin.devops.io',
+    message: 'feat: add AI K8s Checker project + Medium article link',
+    date: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: '7',
+    type: 'PushEvent',
+    repo: 'jatin.devops.io',
+    repoFull: 'JatinLodhi/jatin.devops.io',
+    message: 'feat: add ExperienceSection + AnimatedSection scroll reveals',
+    date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: '8',
+    type: 'CreateEvent',
+    repo: 'ai-k8s-checker',
+    repoFull: 'JatinLodhi/ai-k8s-checker',
+    message: 'created repository ai-k8s-checker',
+    date: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+]
 
 /* ── Helpers ────────────────────────────────────────────── */
 function timeAgo(dateStr: string): string {
@@ -26,15 +87,15 @@ function timeAgo(dateStr: string): string {
   const h = Math.floor(diff / 3_600_000)
   const d = Math.floor(diff / 86_400_000)
   const w = Math.floor(d / 7)
-  if (m < 60)  return `${m}m ago`
-  if (h < 24)  return `${h}h ago`
-  if (d < 7)   return `${d}d ago`
+  if (m < 60) return `${m}m ago`
+  if (h < 24) return `${h}h ago`
+  if (d < 7)  return `${d}d ago`
   return `${w}w ago`
 }
 
 type EventMeta = { label: string; dot: string; text: string }
 
-function eventMeta(type: string): EventMeta {
+function eventMeta(type: StaticEvent['type']): EventMeta {
   switch (type) {
     case 'PushEvent':        return { label: 'push',   dot: 'bg-green-400',  text: 'text-green-400'  }
     case 'PullRequestEvent': return { label: 'pr',     dot: 'bg-purple-400', text: 'text-purple-400' }
@@ -42,57 +103,16 @@ function eventMeta(type: string): EventMeta {
     case 'IssuesEvent':      return { label: 'issue',  dot: 'bg-orange-400', text: 'text-orange-400' }
     case 'WatchEvent':       return { label: 'star',   dot: 'bg-yellow-400', text: 'text-yellow-400' }
     case 'ForkEvent':        return { label: 'fork',   dot: 'bg-cyan-400',   text: 'text-cyan-400'   }
-    default:                 return { label: type.replace('Event', '').toLowerCase(), dot: 'bg-fg-muted', text: 'text-fg-muted' }
   }
 }
 
-function eventDesc(e: GitHubEvent): string {
-  switch (e.type) {
-    case 'PushEvent': {
-      const commits = e.payload.commits ?? []
-      const msg = commits[0]?.message?.split('\n')[0] ?? 'pushed commits'
-      return commits.length > 1 ? `${msg}  (+${commits.length - 1})` : msg
-    }
-    case 'PullRequestEvent': {
-      const pr = e.payload.pull_request
-      return pr ? `#${pr.number}: ${pr.title}` : 'pull request activity'
-    }
-    case 'CreateEvent':
-      return `created ${e.payload.ref_type ?? ''} ${e.payload.ref ?? ''}`.trim()
-    case 'IssuesEvent': {
-      const iss = e.payload.issue
-      return iss ? `#${iss.number}: ${iss.title}` : 'issue activity'
-    }
-    case 'WatchEvent':  return 'starred repository'
-    case 'ForkEvent':   return 'forked repository'
-    default:            return e.type.replace('Event', '')
-  }
-}
-
-const MEANINGFUL = ['PushEvent', 'PullRequestEvent', 'CreateEvent', 'IssuesEvent']
+/* ── Summary stats ─────────────────────────────────────── */
+const pushCount  = EVENTS.filter((e) => e.type === 'PushEvent').length
+const prCount    = EVENTS.filter((e) => e.type === 'PullRequestEvent').length
+const repoCount  = new Set(EVENTS.map((e) => e.repo)).size
 
 /* ── Component ──────────────────────────────────────────── */
 export default function GitHubActivitySection() {
-  const [events,    setEvents]    = useState<GitHubEvent[]>([])
-  const [loading,   setLoading]   = useState(true)
-  const [error,     setError]     = useState(false)
-  const [fetchedAt, setFetchedAt] = useState<Date | null>(null)
-
-  useEffect(() => {
-    fetch('/api/github-activity')
-      .then((r) => { if (!r.ok) throw new Error(); return r.json() })
-      .then((data: GitHubEvent[]) => {
-        setEvents(data.filter((e) => MEANINGFUL.includes(e.type)).slice(0, 8))
-        setFetchedAt(new Date())
-      })
-      .catch(() => setError(true))
-      .finally(() => setLoading(false))
-  }, [])
-
-  const pushes  = events.filter((e) => e.type === 'PushEvent').length
-  const prs     = events.filter((e) => e.type === 'PullRequestEvent').length
-  const repos   = new Set(events.map((e) => e.repo.name)).size
-
   return (
     <section id="activity" className="relative z-10 py-14 lg:py-20 bg-bg-elevated/40">
       <div className="max-w-6xl mx-auto px-6">
@@ -100,23 +120,16 @@ export default function GitHubActivitySection() {
         {/* Header */}
         <AnimatedSection className="mb-8" from="left">
           <p className="text-[0.62rem] font-mono tracking-[0.3em] text-accent uppercase mb-3">
-            // LIVE — GITHUB
+            // GITHUB
           </p>
           <div className="flex items-center gap-5 flex-wrap">
             <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-gradient-heading">
               GITHUB ACTIVITY
             </h2>
-            {!loading && !error && (
-              <div className="flex items-center gap-2 pb-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" aria-hidden="true" />
-                <span className="text-[0.62rem] font-mono tracking-widest text-green-400 uppercase">Live</span>
-                {fetchedAt && (
-                  <span className="text-[0.62rem] font-mono text-fg-muted">
-                    · fetched {timeAgo(fetchedAt.toISOString())}
-                  </span>
-                )}
-              </div>
-            )}
+            <div className="flex items-center gap-2 pb-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" aria-hidden="true" />
+              <span className="text-[0.62rem] font-mono tracking-widest text-green-400 uppercase">Recent</span>
+            </div>
           </div>
         </AnimatedSection>
 
@@ -130,7 +143,7 @@ export default function GitHubActivitySection() {
               <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" aria-hidden="true" />
               <span className="w-2.5 h-2.5 rounded-full bg-green-500/70"  aria-hidden="true" />
               <span className="ml-2 text-[0.65rem] font-mono text-fg-muted flex-1">
-                github.com/JatinLodhi — recent public activity
+                github.com/JatinLodhi — recent activity
               </span>
               <a
                 href="https://github.com/JatinLodhi"
@@ -151,70 +164,46 @@ export default function GitHubActivitySection() {
 
             {/* Event rows */}
             <div className="divide-y divide-white/[0.04]">
-              {loading ? (
-                Array.from({ length: 7 }).map((_, i) => (
-                  <div key={i} className="flex items-center gap-4 px-5 py-3.5 animate-pulse">
-                    <div className="w-14 h-4 bg-white/[0.06] rounded" />
-                    <div className="flex-1 space-y-1.5">
-                      <div className="h-3   bg-white/[0.06] rounded w-40" />
-                      <div className="h-2.5 bg-white/[0.04] rounded w-60" />
-                    </div>
-                    <div className="w-12 h-3 bg-white/[0.04] rounded" />
-                  </div>
-                ))
-              ) : error ? (
-                <div className="px-5 py-10 text-center">
-                  <p className="text-[0.75rem] font-mono text-fg-muted">
-                    ✗ could not reach GitHub API — rate limit or network error
-                  </p>
-                </div>
-              ) : events.length === 0 ? (
-                <div className="px-5 py-10 text-center">
-                  <p className="text-[0.75rem] font-mono text-fg-muted">no recent public events found</p>
-                </div>
-              ) : (
-                events.map((ev) => {
-                  const meta    = eventMeta(ev.type)
-                  const desc    = eventDesc(ev)
-                  const repo    = ev.repo.name.replace('JatinLodhi/', '')
-                  return (
-                    <div
-                      key={ev.id}
-                      className="flex items-start gap-4 px-5 py-3.5 hover:bg-white/[0.02] transition-colors"
-                    >
-                      {/* Type badge */}
-                      <div className="shrink-0 flex items-center gap-1.5 w-14 mt-0.5">
-                        <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${meta.dot}`} aria-hidden="true" />
-                        <span className={`text-[0.62rem] font-mono font-semibold tracking-wide uppercase ${meta.text}`}>
-                          {meta.label}
-                        </span>
-                      </div>
-
-                      {/* Content */}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[0.75rem] font-mono text-fg truncate font-medium">{repo}</p>
-                        <p className="text-[0.7rem] font-mono text-fg-muted truncate mt-0.5">↳ {desc}</p>
-                      </div>
-
-                      {/* Time */}
-                      <span className="shrink-0 text-[0.62rem] font-mono text-fg-muted mt-0.5 w-16 text-right">
-                        {timeAgo(ev.created_at)}
+              {EVENTS.map((ev) => {
+                const meta = eventMeta(ev.type)
+                return (
+                  <a
+                    key={ev.id}
+                    href={`https://github.com/${ev.repoFull}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-start gap-4 px-5 py-3.5 hover:bg-white/[0.02] transition-colors"
+                  >
+                    {/* Type badge */}
+                    <div className="shrink-0 flex items-center gap-1.5 w-14 mt-0.5">
+                      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${meta.dot}`} aria-hidden="true" />
+                      <span className={`text-[0.62rem] font-mono font-semibold tracking-wide uppercase ${meta.text}`}>
+                        {meta.label}
                       </span>
                     </div>
-                  )
-                })
-              )}
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[0.75rem] font-mono text-fg truncate font-medium">{ev.repo}</p>
+                      <p className="text-[0.7rem] font-mono text-fg-muted truncate mt-0.5">↳ {ev.message}</p>
+                    </div>
+
+                    {/* Time */}
+                    <span className="shrink-0 text-[0.62rem] font-mono text-fg-muted mt-0.5 w-16 text-right">
+                      {timeAgo(ev.date)}
+                    </span>
+                  </a>
+                )
+              })}
             </div>
 
             {/* Stats footer */}
-            {!loading && !error && events.length > 0 && (
-              <div className="flex items-center gap-6 flex-wrap px-5 py-3 border-t border-white/[0.06] bg-white/[0.02]">
-                <StatChip value={String(pushes)}  label="pushes"       color="text-green-400"  />
-                <StatChip value={String(repos)}   label="repos active" color="text-accent"     />
-                <StatChip value={String(prs)}     label="PRs"          color="text-purple-400" />
-                <StatChip value="public"          label="visibility"   color="text-fg-muted"   />
-              </div>
-            )}
+            <div className="flex items-center gap-6 flex-wrap px-5 py-3 border-t border-white/[0.06] bg-white/[0.02]">
+              <StatChip value={String(pushCount)} label="pushes"       color="text-green-400"  />
+              <StatChip value={String(repoCount)} label="repos active" color="text-accent"     />
+              <StatChip value={String(prCount)}   label="PRs"          color="text-purple-400" />
+              <StatChip value="public"            label="visibility"   color="text-fg-muted"   />
+            </div>
           </div>
         </AnimatedSection>
       </div>

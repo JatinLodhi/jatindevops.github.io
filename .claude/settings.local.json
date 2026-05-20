@@ -71,7 +71,8 @@
       "Bash(gh repo *)",
       "WebFetch(domain:jatinlodhi.medium.com)",
       "WebFetch(domain:github.com)",
-      "PowerShell(npm run *)"
+      "PowerShell(npm run *)",
+      "Bash(node -e \"const {execSync}=require\\('child_process'\\);try{execSync\\('npx tsc --noEmit',{stdio:'pipe',timeout:35000,cwd:'E:\\\\\\\\\\\\\\\\jatin\\\\\\\\\\\\\\\\jatin.devops.io'}\\);console.log\\('OK'\\)}catch\\(e\\){console.log\\(e.stdout?.toString\\(\\)||e.stderr?.toString\\(\\)\\)}\")"
     ]
   }
 }

@@ -241,6 +241,28 @@ export default function HeroSection() {
             >
               GET IN TOUCH →
             </a>
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              download="Jatin_Lodhi_DevOps_Resume.pdf"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg
+                bg-white/[0.04] text-fg-muted text-sm font-medium border border-white/[0.08]
+                hover:bg-white/[0.08] hover:border-accent/40 hover:text-fg
+                active:scale-[0.98] transition-all duration-200 group/dl"
+              aria-label="Download Resume PDF"
+            >
+              {/* Download icon */}
+              <svg
+                className="w-4 h-4 opacity-70 group-hover/dl:opacity-100 group-hover/dl:translate-y-px transition-all duration-200"
+                viewBox="0 0 16 16" fill="none" stroke="currentColor"
+                strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M8 2v8M5 7l3 3 3-3M2 12h12" />
+              </svg>
+              RESUME
+            </a>
           </div>
         </div>
 

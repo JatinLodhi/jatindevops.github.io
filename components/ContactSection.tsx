@@ -21,24 +21,35 @@ const CONTACT_LINKS = [
     label: 'jllodhi2435@gmail.com',
     href: 'mailto:jllodhi2435@gmail.com',
     ariaLabel: 'Email',
+    download: undefined as string | undefined,
   },
   {
     icon: '💼',
     label: 'linkedin.com/in/jatin-lodhi',
     href: 'https://www.linkedin.com/in/jatin-lodhi',
     ariaLabel: 'LinkedIn profile',
+    download: undefined as string | undefined,
   },
   {
     icon: '🐙',
     label: 'github.com/JatinLodhi',
     href: 'https://github.com/JatinLodhi',
     ariaLabel: 'GitHub profile',
+    download: undefined as string | undefined,
   },
   {
     icon: '📝',
     label: 'jatinlodhi.medium.com',
     href: 'https://jatinlodhi.medium.com/',
     ariaLabel: 'Medium blog',
+    download: undefined as string | undefined,
+  },
+  {
+    icon: '📄',
+    label: 'Download Resume (PDF)',
+    href: '/resume.pdf',
+    ariaLabel: 'Download Resume',
+    download: 'Jatin_Lodhi_DevOps_Resume.pdf',
   },
 ]
 
@@ -65,13 +76,14 @@ export default function ContactSection() {
             </p>
 
             <div className="space-y-3">
-              {CONTACT_LINKS.map(({ icon, label, href, ariaLabel }) => (
+              {CONTACT_LINKS.map(({ icon, label, href, ariaLabel, download }) => (
                 <a
                   key={href}
                   href={href}
                   aria-label={ariaLabel}
-                  target={href.startsWith('http') ? '_blank' : undefined}
+                  target={href.startsWith('http') || href.endsWith('.pdf') ? '_blank' : undefined}
                   rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  download={download}
                   className="flex items-center gap-3 p-4 card-glass rounded-xl group"
                 >
                   <span className="text-xl" aria-hidden="true">{icon}</span>
